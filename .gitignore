@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environment
+.venv/
+venv/
+
+# VSCode
+.vscode/
+
+# Output
+output/
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# Playwright
+playwright-report/
+test-results/
+
+# OS
+Thumbs.db
+.DS_Store
