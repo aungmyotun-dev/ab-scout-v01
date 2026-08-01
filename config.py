@@ -8,7 +8,8 @@ DETAIL_BASE = (
     "https://beta.asianbookie.net/en/matches/odds/"
 )
 
-HEADLESS = False
+import os
+HEADLESS = os.getenv("HEADLESS", "false").lower() == "true"
 
 SLOW_MO = 100
 
