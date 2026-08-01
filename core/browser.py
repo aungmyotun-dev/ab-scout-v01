@@ -51,9 +51,33 @@ class BrowserManager:
 
         # Allow SPA to finish bootstrapping
         self.page.wait_for_timeout(8000)
-        logger.info("Current URL: %s", self.page.url)
-        logger.info("Page title: %s", self.page.title())
-        
+
+        current_url = self.page.url
+        title = self.page.title()
+
+        logger.info("Current URL: %s", current_url)
+        logger.info("Page title: %s", title)
+
+        #
+        # Detect Cloudflare / challenge pages.
+        #
+        if title.strip().lower() == "just a moment...".lower():
+
+            screenshot = "output/cloudflare_blocked.png"
+            html = "output/cloudflare_blocked.html"
+
+            self.page.screenshot(
+                path=screenshot,
+                full_page=True,
+            )
+
+            with open(html, "w", encoding="utf-8") as f:
+                f.write(self.page.content())
+
+            raise RuntimeError(
+                f"Blocked by Cloudflare. "
+                f"Screenshot: {screenshot}, HTML: {html}"
+            )
         
     def stop(self) -> None:
         logger.info("Closing browser...")
