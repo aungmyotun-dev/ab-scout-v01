@@ -51,6 +51,8 @@ class BrowserManager:
 
         # Allow SPA to finish bootstrapping
         self.page.wait_for_timeout(8000)
+        logger.info("Current URL: %s", self.page.url)
+        logger.info("Page title: %s", self.page.title())
         
         
     def stop(self) -> None:

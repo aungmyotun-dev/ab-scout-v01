@@ -93,6 +93,7 @@ class ApiScraper:
         try:
             self.browser.open(BASE_URL)
             self.page.wait_for_timeout(5000)
+
         finally:
             self.page.remove_listener("response", handler)
 
@@ -116,10 +117,7 @@ class ApiScraper:
             )
 
         #
-        # Temporary deterministic selection:
-        # choose the first captured response.
-        #
-        # This is NOT the final business logic.
+        # Temporary deterministic selection.
         #
         match = match_candidates[0]["response"]
 
