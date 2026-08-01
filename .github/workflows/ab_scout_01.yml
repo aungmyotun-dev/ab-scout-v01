@@ -36,3 +36,11 @@ jobs:
       - name: Run AB Scout
         run: |
           python app.py
+      
+      - name: Upload Debug Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-output
+          path: output/
+          if-no-files-found: ignore
