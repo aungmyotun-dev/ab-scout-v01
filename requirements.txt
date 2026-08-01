@@ -1,2 +1,6 @@
 playwright
+msgpack
 pandas
+openpyxl
+requests
+

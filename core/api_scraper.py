@@ -63,28 +63,38 @@ class ApiScraper:
         def handler(response):
 
             nonlocal upcoming
-            nonlocal match
 
             url = response.url
 
             if "/api/poll/upcoming" in url:
                 upcoming = response
+                return
 
-            elif "/api/poll/match?" in url:
+            if "/api/poll/match?" in url:
+
+                body = response.body()
+
                 logger.info(
-                    "MATCH API: %d bytes",
-                    len(response.body()),
+                    "MATCH API #%d : %d bytes",
+                    len(match_candidates) + 1,
+                    len(body),
                 )
 
-                match_candidates.append(response)
+                match_candidates.append(
+                    {
+                        "response": response,
+                        "url": url,
+                        "size": len(body),
+                    }
+                )
 
         self.page.on("response", handler)
 
-        self.browser.open(BASE_URL)
-
-        self.page.wait_for_timeout(5000)
-
-        self.page.remove_listener("response", handler)
+        try:
+            self.browser.open(BASE_URL)
+            self.page.wait_for_timeout(5000)
+        finally:
+            self.page.remove_listener("response", handler)
 
         if upcoming is None:
             raise RuntimeError("Upcoming API was not captured.")
@@ -92,14 +102,29 @@ class ApiScraper:
         if not match_candidates:
             raise RuntimeError("Match API was not captured.")
 
-        match = max(
-            match_candidates,
-            key=lambda r: len(r.body()),
+        logger.info(
+            "Captured %d Match API responses.",
+            len(match_candidates),
         )
 
+        for i, item in enumerate(match_candidates, start=1):
+            logger.info(
+                "Candidate %d : %d bytes : %s",
+                i,
+                item["size"],
+                item["url"],
+            )
+
+        #
+        # Temporary deterministic selection:
+        # choose the first captured response.
+        #
+        # This is NOT the final business logic.
+        #
+        match = match_candidates[0]["response"]
+
         logger.info(
-            "Selected Match API: %d bytes",
-            len(match.body()),
+            "Selected Match API : Candidate #1",
         )
 
         return upcoming, match
