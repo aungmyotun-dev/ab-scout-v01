@@ -18,3 +18,10 @@ TIMEOUT = 30000
 OUTPUT_DIR = "output"
 
 CSV_NAME = "asianbookie_matches.csv"
+
+# ------------------------
+# Telegram
+# ------------------------
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")

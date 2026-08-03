@@ -14,6 +14,7 @@ import pandas as pd
 from config import CSV_NAME, OUTPUT_DIR
 from core.api_scraper import ApiScraper
 from core.browser import BrowserManager
+from core.telegram import TelegramNotifier
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -90,6 +91,27 @@ def main() -> None:
             "CSV: %s",
             csv_path,
         )
+
+        notifier = TelegramNotifier()
+
+        if notifier.enabled():
+
+            notifier.send_message(
+                "\n".join(
+                    [
+                        "🤖 AB Scout Completed",
+                        "",
+                        f"✅ Matches : {len(df)}",
+                        "",
+                        "📎 CSV attached.",
+                    ]
+                )
+            )
+
+            notifier.send_document(
+                str(csv_path),
+                caption="AB Scout CSV",
+            )
 
     finally:
 
