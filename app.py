@@ -94,6 +94,10 @@ def main() -> None:
 
         notifier = TelegramNotifier()
 
+        logger.info("Telegram enabled: %s", notifier.enabled())
+        logger.info("Telegram token exists: %s", bool(notifier.token))
+        logger.info("Telegram chat id: %s", notifier.chat_id)
+
         if notifier.enabled():
 
             notifier.send_message(
@@ -112,6 +116,7 @@ def main() -> None:
                 str(csv_path),
                 caption="AB Scout CSV",
             )
+
 
     finally:
 
