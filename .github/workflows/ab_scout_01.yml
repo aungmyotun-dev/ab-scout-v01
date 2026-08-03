@@ -6,7 +6,8 @@ on:
 jobs:
   scraper:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+
     env:
       HEADLESS: "true"
 
@@ -30,13 +31,14 @@ jobs:
           playwright install chromium
 
       - name: Install Playwright Dependencies
+        if: runner.os == 'Linux'
         run: |
           playwright install-deps
 
       - name: Run AB Scout
         run: |
           python app.py
-      
+
       - name: Upload Debug Artifacts
         if: always()
         uses: actions/upload-artifact@v4
