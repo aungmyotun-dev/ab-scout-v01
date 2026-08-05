@@ -22,14 +22,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      # - name: Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.12"
+      
+      - name: Check Python
+        run: |
+          python3 --version
+          python3 -m pip --version
 
       - name: Install Python Packages
         run: |
-          pip install -r requirements.txt
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
 
       - name: Install Playwright
         run: |
@@ -42,12 +48,12 @@ jobs:
 
       - name: Run AB Scout
         run: |
-          python app.py
+          python3 app.py
 
-      - name: Upload Debug Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-output
-          path: output/
-          if-no-files-found: ignore
+      # - name: Upload Debug Artifacts
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: debug-output
+      #     path: output/
+      #     if-no-files-found: ignore
