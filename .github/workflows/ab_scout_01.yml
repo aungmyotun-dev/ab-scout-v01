@@ -44,7 +44,11 @@ jobs:
       - name: Install Playwright Dependencies
         if: runner.os == 'Linux'
         run: |
-          playwright install-deps
+          python3 -m playwright install-deps
+
+      - name: Install Playwright Browser
+        run: |
+          python3 -m playwright install chromium
 
       - name: Run AB Scout
         run: |
