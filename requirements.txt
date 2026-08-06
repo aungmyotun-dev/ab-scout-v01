@@ -1,6 +1,5 @@
-playwright
+playwright==1.62.0
 msgpack
 pandas
 openpyxl
 requests
-
