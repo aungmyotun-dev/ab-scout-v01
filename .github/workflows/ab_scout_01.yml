@@ -17,7 +17,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          sudo docker build -t ab-scout .
+          sudo docker build --pull --no-cache -t ab-scout .
 
       - name: Run AB Scout
         run: |
