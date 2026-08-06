@@ -3,6 +3,7 @@ Application configuration.
 """
 
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import os
 
 BASE_URL = "https://beta.asianbookie.net/en/upcoming"
@@ -21,7 +22,7 @@ OUTPUT_DIR = "output"
 
 CSV_NAME = (
     f"asianbookie_matches_"
-    f"{datetime.now().strftime('%Y-%m-%d-%H-%M')}.csv"
+    f"{datetime.now(ZoneInfo('Asia/Yangon')).strftime('%Y-%m-%d-%H-%M')}.csv"
 )
 
 # ------------------------
