@@ -5,29 +5,60 @@ on:
 
 jobs:
   scraper:
-    # runs-on:
-    #   - self-hosted
-    #   - nas
-    #   - arm64
-    #   - playwright
 
     runs-on:
-    - self-hosted
-    - backup
-    - playwright
+      - self-hosted
+      - backup
+      - playwright
+
+    env:
+      HEADLESS: "true"
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
     steps:
+
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Docker Image
+      - name: Debug Runner
         run: |
-          sudo docker build --pull --no-cache -t ab-scout .
+          echo "Runner OS: ${{ runner.os }}"
 
-      - name: Run AB Scout
+      ##################################################
+      # Linux (NAS)
+      ##################################################
+
+      - name: Build Docker Image (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo docker build -t ab-scout .
+
+      - name: Run AB Scout (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo docker run --rm \
-            -e HEADLESS=true \
-            -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
-            -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -e HEADLESS \
+            -e TELEGRAM_BOT_TOKEN \
+            -e TELEGRAM_CHAT_ID \
+            ab-scout
+
+      ##################################################
+      # Windows (Laptop)
+      ##################################################
+
+      - name: Build Docker Image (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          docker build -t ab-scout .
+
+      - name: Run AB Scout (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          docker run --rm `
+            -e HEADLESS `
+            -e TELEGRAM_BOT_TOKEN `
+            -e TELEGRAM_CHAT_ID `
             ab-scout
