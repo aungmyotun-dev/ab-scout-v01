@@ -1,0 +1,37 @@
+name: AB Scout (Primary)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scraper:
+
+    runs-on:
+      - self-hosted
+      - primary
+      - playwright
+
+    env:
+      HEADLESS: "true"
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker Version
+        run: docker version
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ab-scout .
+
+      - name: Run AB Scout
+        run: |
+          docker run --rm \
+            -e HEADLESS=true \
+            -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+            -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            ab-scout
