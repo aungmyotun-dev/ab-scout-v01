@@ -5,59 +5,24 @@ on:
 
 jobs:
   scraper:
-
-    runs-on: 
+    runs-on:
       - self-hosted
       - nas
       - arm64
       - playwright
 
-    env:
-      HEADLESS: "true"
-      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Setup Python
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: "3.12"
-      
-      - name: Check Python
+      - name: Build Docker Image
         run: |
-          python3 --version
-          python3 -m pip --version
-
-      - name: Install Python Packages
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install -r requirements.txt
-
-      # - name: Install Playwright
-      #   run: |
-      #     playwright install chromium
-
-      # - name: Install Playwright Dependencies
-      #   if: runner.os == 'Linux'
-      #   run: |
-      #     python3 -m playwright install-deps
-
-      - name: Install Playwright Browser
-        run: |
-          python3 -m playwright install chromium
+          sudo docker build -t ab-scout .
 
       - name: Run AB Scout
         run: |
-          python3 app.py
-
-      # - name: Upload Debug Artifacts
-      #   if: always()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: debug-output
-      #     path: output/
-      #     if-no-files-found: ignore
+          sudo docker run --rm \
+            -e HEADLESS=true \
+            -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+            -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            ab-scout
