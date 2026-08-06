@@ -5,11 +5,16 @@ on:
 
 jobs:
   scraper:
+    # runs-on:
+    #   - self-hosted
+    #   - nas
+    #   - arm64
+    #   - playwright
+
     runs-on:
-      - self-hosted
-      - nas
-      - arm64
-      - playwright
+    - self-hosted
+    - backup
+    - playwright
 
     steps:
       - name: Checkout

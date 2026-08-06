@@ -2,13 +2,15 @@
 Application configuration.
 """
 
+from datetime import datetime
+import os
+
 BASE_URL = "https://beta.asianbookie.net/en/upcoming"
 
 DETAIL_BASE = (
     "https://beta.asianbookie.net/en/matches/odds/"
 )
 
-import os
 HEADLESS = os.getenv("HEADLESS", "false").lower() == "true"
 
 SLOW_MO = 100
@@ -17,7 +19,10 @@ TIMEOUT = 30000
 
 OUTPUT_DIR = "output"
 
-CSV_NAME = "asianbookie_matches.csv"
+CSV_NAME = (
+    f"asianbookie_matches_"
+    f"{datetime.now().strftime('%Y-%m-%d-%H-%M')}.csv"
+)
 
 # ------------------------
 # Telegram
