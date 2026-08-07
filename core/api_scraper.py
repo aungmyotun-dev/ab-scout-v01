@@ -105,7 +105,16 @@ class ApiScraper:
         try:
             logger.info("Registering response listener...")
             self.browser.open(BASE_URL)
-            self.page.wait_for_timeout(5000)
+            import time
+
+            deadline = time.time() + 30
+
+            while time.time() < deadline:
+
+                if upcoming is not None and match_candidates:
+                    break
+
+                self.page.wait_for_timeout(200)
 
         finally:
             logger.info("Removing response listener...")
