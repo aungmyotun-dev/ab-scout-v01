@@ -22,15 +22,15 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Docker Version
-      run: sudo docker version
+      run: sudo -n docker version
 
     - name: Build Docker Image
       run: |
-        sudo docker build -t ab-scout .
+        sudo -n docker build -t ab-scout .
 
     - name: Run AB Scout
       run: |
-        sudo docker run --rm \
+        sudo -n docker run --rm \
           -e HEADLESS=true \
           -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
           -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
