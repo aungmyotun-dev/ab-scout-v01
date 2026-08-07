@@ -63,11 +63,7 @@ class ApiScraper:
         def handler(response):
 
             nonlocal upcoming
-            logger.info(
-                "RESPONSE %s",
-                response.url,
-            )
-
+            
             url = response.url
 
             if "/api/poll/upcoming" in url:
@@ -93,15 +89,7 @@ class ApiScraper:
                 )
 
         self.page.on("response", handler)
-        def request_handler(request):
-            logger.info("REQUEST %s", request.url)
-
-        def request_finished_handler(request):
-            logger.info("REQUEST FINISHED %s", request.url)
-
-        self.page.on("request", request_handler)
-        self.page.on("requestfinished", request_finished_handler)
-
+        
         try:
             logger.info("Registering response listener...")
             self.browser.open(BASE_URL)
@@ -130,9 +118,7 @@ class ApiScraper:
             "Captured %d Match API responses.",
             len(match_candidates),
         )
-        self.page.remove_listener("request", request_handler)
-        self.page.remove_listener("requestfinished", request_finished_handler)
-
+    
         for i, item in enumerate(match_candidates, start=1):
             logger.info(
                 "Candidate %d : %d bytes : %s",
