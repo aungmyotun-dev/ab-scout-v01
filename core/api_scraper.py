@@ -369,7 +369,7 @@ class ApiScraper:
 
             "match_time": self._format_timestamp(
                 upcoming[UP_MATCH_TIME],
-                "%d %b %H:%M",
+                "%H:%M",
             ),
 
             # ---------------------------------
