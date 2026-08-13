@@ -1,33 +1,29 @@
-name: AB Scout
+name: AB Scout (Primary)
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 */6 * * *"
 
 jobs:
-  scrape:
-    runs-on: ubuntu-latest
+  scraper:
+    runs-on:
+      - self-hosted
+      - primary
+      - playwright
+
+    env:
+      HEADLESS: "true"
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          playwright install --with-deps chromium
+          python -m pip install -r requirements.txt
+          python -m playwright install chromium
 
-      - name: Check Telegram connection
-        run: curl -4 --fail --retry 3 https://api.telegram.org
-
-      - name: Run scraper
-        env:
-          HEADLESS: "true"
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Run AB Scout
         run: python app.py
