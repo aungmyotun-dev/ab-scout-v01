@@ -402,7 +402,7 @@ class ApiScraper:
 
             "ou_line": match[MT_OU_LINE],
             "over": match[MT_OVER],
-            "under": match[MT_UNDER_OPEN],
+            "under": match[MT_UNDER],
 
             # ---------------------------------
             # 1X2
