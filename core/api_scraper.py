@@ -9,7 +9,7 @@ import json
 
 import msgpack
 
-from config import BASE_URL
+from config import BASE_URL, OUTPUT_DIR
 
 from utils.logger import get_logger
 
