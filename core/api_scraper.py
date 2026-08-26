@@ -3,13 +3,11 @@ AsianBookie API Scraper
 Reads upcoming matches directly from the MessagePack API.
 """
 
-from datetime import datetime, timezone
-from pathlib import Path
-import json
+from datetime import datetime
 
 import msgpack
 
-from config import BASE_URL, OUTPUT_DIR
+from config import BASE_URL
 
 from utils.logger import get_logger
 
@@ -163,7 +161,6 @@ class ApiScraper:
 
             seen_hashes.add(match_hash)
             lookup[match_hash] = row
-            self._diagnose_status(row)
 
         logger.info(
             "Match lookup : %d",
@@ -171,37 +168,6 @@ class ApiScraper:
         )
 
         return lookup
-
-    def _diagnose_status(self, row):
-
-        try:
-            if len(row) < 25:
-                return
-
-            status = row[MT_STATUS]
-
-            if status in ("PENDING", "", None):
-                return
-
-            diag_dir = Path(OUTPUT_DIR) / "diagnostics"
-            diag_dir.mkdir(parents=True, exist_ok=True)
-            diag_path = diag_dir / "status_anomalies.jsonl"
-
-            with open(diag_path, "a", encoding="utf-8") as f:
-                f.write(json.dumps({
-                    "timestamp": datetime.now(timezone.utc).isoformat(),
-                    "match_hash": row[MT_MATCH_HASH],
-                    "row": row,
-                }, default=str) + "\n")
-
-            logger.warning(
-                "Status anomaly: hash=%s status=%s",
-                row[MT_MATCH_HASH],
-                status,
-            )
-
-        except Exception as e:
-            logger.warning("Diagnostic write failed: %s", e)
 
     def _build_league_lookup(self, upcoming_data):
 
